@@ -1,7 +1,9 @@
 'use strict';
 
 var _ = require('lodash');
+var marked = require('marked');
 var modelUtils = require('../models/utils');
+
 var FIELD_SPLITTER = /[\s,]+/;
 var ANONYMOUS_USER_ID = process.env.ANONYMOUS_USER_ID || '0e7c393e-71dd-4368-93a9-fcfff59f9fff';
 
@@ -180,8 +182,13 @@ var datasetMapper = function(data) {
 var questionMapper = function(data) {
   var dependants = null;
   if(data.dependants){ dependants = data.dependants.split(FIELD_SPLITTER); }
-  return _.defaults({id: data.id.toLowerCase(), dependants: dependants,
-                     score: data.score || 0, order: data.order || 100}, data);
+  return _.defaults({
+    id: data.id.toLowerCase(),
+    description: marked(data.description),
+    dependants: dependants,
+    score: data.score || 0,
+    order: data.order || 100
+  }, data);
 };
 
 
